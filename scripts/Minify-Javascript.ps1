@@ -11,8 +11,8 @@ try {
     Add-Type -Path $libPath | Out-Null
 
     try {
-        $jsCompressor = New-Object -TypeName Yahoo.Yui.Compressor.JavaScriptCompressor
         $content = [IO.File]::ReadAllText($file.FullName)
+        $jsCompressor = New-Object -TypeName Yahoo.Yui.Compressor.JavaScriptCompressor
         $compressedContent = $jsCompressor.Compress($content)
         Set-ItemProperty $file.FullName -name IsReadOnly -value $false
         [IO.File]::WriteAllText($file.FullName, $compressedContent)
