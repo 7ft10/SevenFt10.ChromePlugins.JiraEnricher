@@ -3,26 +3,29 @@
 
 <head>
     <title>Jira Enricher - Options</title>
-    <style type="text/css">
-        body {
-            margin: 10px;
-            white-space: nowrap;
-        }
-        
-        #container {
-            align-items: center;
-            display: flex;
-            justify-content: space-between;
-        }
-    </style>
+    <link href="options.css" type="text/css" rel="stylesheet" />
 </head>
 
 <body>
-    <div>
-        Jira Enricher is to fill the gaps that we have seen in Jira. There are plenty. Therefore, this extension will continue to grow.
+    <h1>
+        Jira Enricher by SMEx Digital
+        <img src="../images/icon128.png" height="24" width="24" alt="SMEx Digital" />
+    </h1>
+
+    <!-- Tab links -->
+    <div class="tab">
+        <button class="tablinks" data-tabid="Jira">Jira</button>
+        <button class="tablinks" data-tabid="ServiceDesk">Service Desk</button>
+        <button class="tablinks" data-tabid="Templates">Templates</button>
+        <button class="tablinks" data-tabid="About">About</button>
+        <button class="btn floatRight" id="SaveBtn">Save</button>
+        <button class="btn floatRight" id="ResetBtn">Reset</button>
     </div>
-    <div id="container">
-        <dl id="checkboxes">
+
+    <!-- Tab content -->
+    <div id="Jira" class="tabcontent">
+        <h3>Jira Software</h3>
+        <dl id="storage">
             <dt>Options:</dt>
             <dd>
                 <input type="checkbox" id="addRank" />
@@ -52,12 +55,18 @@
                     Adds a hover-over containing the sub-task details including status, name and assignee (sub-tasks must be added to the card layout).
                 </div>
             </dd>
+        </dl>
+    </div>
+
+    <div id="ServiceDesk" class="tabcontent">
+        <h3>Service Desk</h3>
+        <dl id="storage">
+            <dt>Options:</dt>
             <dd>
                 <input type="checkbox" id="fixServiceDeskQueues" />
                 <label for="fixServiceDeskQueues">Fix Service Desk Queues</label>
-                <br />
-                <input type="text" id="seperator" />
-                <label for="seperator">Queues Prefix</label>
+                <input type="text" id="seperator" maxlength="3" style="padding-right: 20px; width: 20px;" />
+                <label for="seperator">Queue Seperator</label>
                 <div style="font-style: italic;">
                     Groups service desk queues based on a prefix.
                 </div>
@@ -65,8 +74,38 @@
         </dl>
     </div>
 
-    <script src="../scripts/defaultOptions.js"></script>
+    <div id="Templates" class="tabcontent">
+        <h3>Templates</h3>
+        <dl id="storage">
+            <dt>Options:</dt>
+            <dd>
+                <table id="templateTable">
+                    <thead>
+                        <th scope="col">Type</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Text</th>
+                    </thead>
+                    <tbody>
+                        <!-- dynamically added rows -->
+                    </tbody>
+                </table>
+                <div style="font-style: italic;">
+                    Add templates to the context menu.
+                </div>
+                <button id="createRow">Add New Template</button>
+            </dd>
+        </dl>
+    </div>
+
+    <div id="About" class="tabcontent">
+        <h3>About</h3>
+        <p>About</p>
+    </div>
+
+    <script src="defaultOptions.js"></script>
+    <script src="../scripts/utils.js"></script>
     <script src="options.js"></script>
+    <script src="tabs.js"></script>
 </body>
 
 </html>

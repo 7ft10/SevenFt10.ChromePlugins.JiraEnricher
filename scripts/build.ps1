@@ -25,14 +25,20 @@ Show-Completed -Percentage 1 -Activity "Build" -Status "Creating Folders"
 if (!(Test-Path -Path './obj/')) {
     New-Item -ItemType directory -Path './obj/'
 }
-if (!(Test-Path -Path './obj/release')) {
-    New-Item -ItemType directory -Path './obj/release'
-}
-if (!(Test-Path -Path './obj/debug')) {
-    New-Item -ItemType directory -Path './obj/debug'
+if (!(Test-Path -Path './bin/')) {
+    New-Item -ItemType directory -Path './bin/'
 }
 
 if ($IsReleaseBuild) {
+    if (!(Test-Path -Path './obj/release')) {
+        New-Item -ItemType directory -Path './obj/release'
+    }
+    if (!(Test-Path -Path './bin/release')) {
+        New-Item -ItemType directory -Path './bin/release'
+    }
+
+    Show-Completed -Percentage 3 -Activity "Cleaning"
+    Get-ChildItem -Path './bin/release' -Include * -File -Recurse | ForEach-Object { Set-ItemProperty $_.FullName -name IsReadOnly -value $false; $_.Delete() }
     Show-Completed -Percentage 5 -Activity "Cleaning"
     Get-ChildItem -Path './obj/release' -Include * -File -Recurse | ForEach-Object { Set-ItemProperty $_.FullName -name IsReadOnly -value $false; $_.Delete() }
 
@@ -52,16 +58,27 @@ if ($IsReleaseBuild) {
     }
 
     Show-Completed -Percentage 90 -Activity "Archiving"
-    Compress-Archive -Path "./obj/release/*" -DestinationPath "./obj/release/$($manifest.name).zip" -Force
+    Compress-Archive -Path "./obj/release/*" -DestinationPath "./bin/release/$($manifest.name).zip" -Force
 
-    Show-Completed -Percentage 95 -Activity "Cleaning"
-    Remove-Item "./obj/release/*" -Exclude "$($manifest.name).zip" -Force -Recurse
+    #Show-Completed -Percentage 95 -Activity "Cleaning"
+    #Remove-Item "./obj/release/*" -Exclude "$($manifest.name).zip" -Force -Recurse
 }
 else {
-    Show-Completed -Percentage 33 -Activity "Cleaning"
+    if (!(Test-Path -Path './obj/debug')) {
+        New-Item -ItemType directory -Path './obj/debug'
+    }
+    if (!(Test-Path -Path './bin/debug')) {
+        New-Item -ItemType directory -Path './bin/debug'
+    }
+
+    Show-Completed -Percentage 20 -Activity "Cleaning"
+    Get-ChildItem -Path './bin/debug' -Include * -File -Recurse | ForEach-Object { Set-ItemProperty $_.FullName -name IsReadOnly -value $false; $_.Delete() }
+    Show-Completed -Percentage 40 -Activity "Cleaning"
     Get-ChildItem -Path './obj/debug' -Include * -File -Recurse | ForEach-Object { Set-ItemProperty $_.FullName -name IsReadOnly -value $false; $_.Delete() }
 
-    Show-Completed -Percentage 66 -Activity "Copying"
+    Show-Completed -Percentage 60 -Activity "Copying"
+    Copy-Item -Path './src/*' -Destination './bin/debug/' -Force -Recurse
+    Show-Completed -Percentage 80 -Activity "Copying"
     Copy-Item -Path './src/*' -Destination './obj/debug/' -Force -Recurse
 }
 
