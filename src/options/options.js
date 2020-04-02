@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function addBlankRow() {
         var row = document.getElementById("templateTable").querySelector("tbody").insertRow(0);
         var td = row.insertCell(0);
-        td.appendChild(utils.createElementFromHTML(td, '<select><option value="Comments">Comments</option><option value="Agile">Agile</option></select>)'));
+        td.appendChild(utils.createElementFromHTML(td, '<select><option>No Category</option><option value="Comments">Comments</option><option value="Agile">Agile</option></select>)'));
         td = row.insertCell(1);
         td.appendChild(utils.createElementFromHTML(td, '<input type="text" class="templateTitle"></input>'));
         td = row.insertCell(2);
@@ -34,8 +34,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function addNewRow(template) {
         var row = addBlankRow();
         var dd = row.querySelector('select');
+        dd.selectedIndex = 0;
         for (var i = 0; i < dd.options.length; i++) {
-            if (dd.options[i].text === template.type) {
+            if (dd.options[i].value === template.type) {
                 dd.selectedIndex = i;
                 break;
             }
@@ -73,9 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector("#SaveBtn").addEventListener('click', function(_evt) {
         var templates = [];
         document.querySelectorAll('select').forEach(function(dd, i) {
+            var type = dd.options[dd.selectedIndex].value;
             var template = {
                 id: "Template_" + i,
-                type: dd.options[dd.selectedIndex].text,
+                type: type == "No Category" ? null : type,
                 title: dd.parentElement.parentElement.querySelector("input.templateTitle").value,
                 text: dd.parentElement.parentElement.querySelector("textarea.templateText").value,
             };

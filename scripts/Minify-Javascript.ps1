@@ -19,9 +19,9 @@ try {
         Set-ItemProperty $file.FullName -name IsReadOnly -value $true
     }
     catch [EcmaScript.NET.EcmaScriptRuntimeException] {
-        Write-Warning "File: $($file.FullName)`nMessage: $($_)`nLineNumber: $($_.Exception.LineNumber)`nLineSource: $($_.Exception.LineSource)`nColumnNumber: $($_.Exception.ColumnNumber)"
+        Write-Warning "`nFile: $($file.FullName)`nMessage: $($_)`nLineNumber: $($_.Exception.LineNumber)`nLineSource: $($_.Exception.LineSource)`nColumnNumber: $($_.Exception.ColumnNumber)"
     }
 }
 catch [System.Reflection.ReflectionTypeLoadException] {
-    Write-Error "Message: $($_.Exception.Message)`nStackTrace: $($_.Exception.StackTrace)`nLoaderExceptions: $($_.Exception.LoaderExceptions)"
+    Write-Error "`nMessage: $($_.Exception.Message)`nStackTrace: $($_.Exception.StackTrace)`nLoaderExceptions: $($_.Exception.LoaderExceptions)"
 }

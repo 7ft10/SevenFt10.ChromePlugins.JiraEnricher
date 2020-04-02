@@ -36,11 +36,10 @@ chrome.contextMenus.removeAll(function() {
             title: "Templates",
             parentId: "Top"
         }));
-        var templates = defaultOptions.templates;
-        if (storage.options && storage.options.templates) templates = storage.options.templates;
+        var templates = (storage.options && storage.options.templates) ? storage.options.templates : defaultOptions.templates;
         var categoriesCreated = [];
         templates.forEach(function(template) {
-            if (categoriesCreated.indexOf(template.type) == -1) {
+            if (template.type != null && categoriesCreated.indexOf(template.type) == -1) {
                 chrome.contextMenus.create(Object.assign(docPattern, {
                     contexts: ["editable"],
                     id: template.type,
@@ -53,7 +52,7 @@ chrome.contextMenus.removeAll(function() {
                 contexts: ["editable"],
                 id: template.id,
                 title: template.title,
-                parentId: template.type,
+                parentId: template.type || "Templates",
             }));
         });
         // options
