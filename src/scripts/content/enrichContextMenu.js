@@ -2,6 +2,8 @@
 
 chrome.runtime.onMessage.addListener(function(msg, _sender, _sendResponse) {
     function insertText(templateId) {
+        var oldCursor = document.activeElement.style.cursor;
+        document.activeElement.style.cursor = "progress";
         chrome.storage.sync.get(['options'], function(storage) {
             if (chrome.runtime.lastError) console.error(chrome.runtime.lastError);
             var templates = (storage.options && storage.options.templates) ? storage.options.templates : defaultOptions.templates;
@@ -23,6 +25,7 @@ chrome.runtime.onMessage.addListener(function(msg, _sender, _sendResponse) {
                     document.activeElement.innerText = template.text;
                 }
             }
+            document.activeElement.style.cursor = oldCursor;
         })
     }
 
